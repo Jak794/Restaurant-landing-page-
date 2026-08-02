@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember & Oak — Wood-Fired Kitchen & Bar</title>
+<meta name="description" content="Ember & Oak is a wood-fired restaurant serving seasonal, open-flame cooking and oak-aged wines. Reserve your table for an unforgettable evening.">
+<meta name="theme-color" content="#111827">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+<!-- Tailwind CSS (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          charcoal: { DEFAULT: '#111827', deep: '#0A0E17', light: '#1F2937' },
+          gold: { DEFAULT: '#D4AF37', light: '#F0D878', dark: '#A9861F' },
+          ember: { DEFAULT: '#F59E0B', deep: '#C2410C' },
+          cream: '#FDF6E9',
+          mist: '#F8FAFC'
+        },
+        fontFamily: {
+          display: ['"Playfair Display"', 'serif'],
+          body: ['Inter', 'sans-serif'],
+          accent: ['Poppins', 'sans-serif']
+        },
+        boxShadow: {
+          gold: '0 20px 45px -15px rgba(212,175,55,0.45)',
+          glow: '0 0 40px rgba(245,158,11,0.30)',
+          soft: '0 10px 30px -10px rgba(17,24,39,0.15)'
+        },
+        backgroundImage: {
+          'gold-gradient': 'linear-gradient(135deg, #D4AF37 0%, #F59E0B 100%)',
+          'char-gradient': 'linear-gradient(180deg, rgba(10,14,23,0.2) 0%, rgba(10,14,23,0.95) 100%)'
+        },
+        animation: {
+          'float-slow': 'floatY 6s ease-in-out infinite',
+          'float-slower': 'floatY 8s ease-in-out infinite 1s',
+          'spin-slow': 'spin 12s linear infinite'
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root{ scroll-behavior: smooth; }
+  html{ scroll-behavior: smooth; }
+  body{ background:#FDFDFC; overflow-x:hidden; }
+  .font-display{ font-family:'Playfair Display', serif; }
+  .font-body{ font-family:'Inter', sans-serif; }
+  .font-accent{ font-family:'Poppins', sans-serif; }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal{ opacity:0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1); }
+  .reveal.is-visible{ opacity:1; transform:none; }
+  .reveal-left{ opacity:0; transform: translateX(-32px); transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1); }
+  .reveal-left.is-visible{ opacity:1; transform:none; }
+  .reveal-right{ opacity:0; transform: translateX(32px); transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1); }
+  .reveal-right.is-visible{ opacity:1; transform:none; }
+  .reveal-zoom{ opacity:0; transform: scale(.92); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+  .reveal-zoom.is-visible{ opacity:1; transform:none; }
+  .reveal-stagger.is-visible > * { animation: fadeUp .7s cubic-bezier(.22,1,.36,1) both; }
+  .reveal-stagger.is-visible > *:nth-child(1){ animation-delay:.05s }
+  .reveal-stagger.is-visible > *:nth-child(2){ animation-delay:.15s }
+  .reveal-stagger.is-visible > *:nth-child(3){ animation-delay:.25s }
+  .reveal-stagger.is-visible > *:nth-child(4){ animation-delay:.35s }
+  .reveal-stagger.is-visible > *:nth-child(5){ animation-delay:.45s }
+  .reveal-stagger.is-visible > *:nth-child(6){ animation-delay:.55s }
+  .reveal-stagger.is-visible > *:nth-child(7){ animation-delay:.65s }
+  .reveal-stagger.is-visible > *:nth-child(8){ animation-delay:.75s }
+
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(24px);} to{ opacity:1; transform:none; } }
+  @keyframes floatY{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-14px);} }
+  @keyframes shimmer{ 0%{ background-position: -400px 0;} 100%{ background-position: 400px 0;} }
+
+  /* ---------- Glassmorphism ---------- */
+  .glass{ background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.14); }
+  .glass-light{ background: rgba(255,255,255,0.65); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.5); }
+  .glass-nav{ background: rgba(10,14,23,0.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+  /* ---------- Buttons ---------- */
+  .btn-primary{ position:relative; overflow:hidden; background-image:linear-gradient(135deg,#D4AF37,#F59E0B); box-shadow: 0 14px 30px -10px rgba(212,175,55,.55); transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease; }
+  .btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 20px 40px -8px rgba(212,175,55,.65); }
+  .btn-secondary{ position:relative; overflow:hidden; border:1.5px solid rgba(212,175,55,.7); transition: all .35s cubic-bezier(.22,1,.36,1); }
+  .btn-secondary:hover{ background: #D4AF37; color:#111827; border-color:#D4AF37; transform: translateY(-3px); }
+  .ripple{ position:absolute; border-radius:9999px; transform:scale(0); animation:ripple-anim .6s linear; background: rgba(255,255,255,.55); pointer-events:none; }
+  @keyframes ripple-anim{ to{ transform:scale(3.2); opacity:0; } }
+
+  /* ---------- Cards ---------- */
+  .card-hover{ transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease; }
+  .card-hover:hover{ transform: translateY(-8px); box-shadow: 0 30px 60px -20px rgba(17,24,39,.25), 0 0 0 1px rgba(212,175,55,.15); }
+  .glow-hover{ transition: box-shadow .4s ease, border-color .4s ease; }
+  .glow-hover:hover{ box-shadow: 0 0 45px rgba(245,158,11,.35); border-color: rgba(212,175,55,.6); }
+
+  /* ---------- Nav underline ---------- */
+  .nav-link{ position:relative; }
+  .nav-link::after{ content:''; position:absolute; left:0; bottom:-4px; width:0; height:1.5px; background: linear-gradient(90deg,#D4AF37,#F59E0B); transition: width .35s ease; }
+  .nav-link:hover::after{ width:100%; }
+
+  /* ---------- Scrollbar ---------- */
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:#F8FAFC; }
+  ::-webkit-scrollbar-thumb{ background: linear-gradient(180deg,#D4AF37,#F59E0B); border-radius:8px; }
+
+  /* ---------- Focus visibility (a11y) ---------- */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline: 2.5px solid #D4AF37; outline-offset: 3px; border-radius: 4px;
+  }
+
+  /* ---------- Skip link ---------- */
+  .skip-link{ position:absolute; left:-9999px; top:auto; z-index:100; background:#111827; color:#D4AF37; padding:.75rem 1.25rem; border-radius:.5rem; }
+  .skip-link:focus{ left:1rem; top:1rem; }
+
+  /* ---------- Mobile drawer ---------- */
+  #mobileDrawer{ transform: translateX(100%); transition: transform .5s cubic-bezier(.22,1,.36,1); }
+  #mobileDrawer.open{ transform: translateX(0); }
+  #drawerOverlay{ opacity:0; pointer-events:none; transition: opacity .4s ease; }
+  #drawerOverlay.open{ opacity:1; pointer-events:auto; }
+
+  /* ---------- Ember particle canvas ---------- */
+  .ember-canvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+
+  /* ---------- Gallery masonry ---------- */
+  .masonry{ column-count:1; column-gap:1rem; }
+  @media(min-width:640px){ .masonry{ column-count:2; } }
+  @media(min-width:1024px){ .masonry{ column-count:3; } }
+  .masonry > *{ break-inside: avoid; margin-bottom:1rem; }
+
+  /* ---------- Utility ---------- */
+  .text-gold-gradient{ background-image:linear-gradient(135deg,#D4AF37,#F59E0B); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .divider-gold{ height:2px; width:64px; background:linear-gradient(90deg,#D4AF37,#F59E0B); border-radius:2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body class="font-body text-charcoal bg-mist antialiased">
+<a href="#main" class="skip-link font-accent text-sm font-semibold">Skip to main content</a>
+
+<!-- ============ NAVIGATION ============ -->
+<header id="siteNav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+  <nav class="glass-nav transition-all duration-500" aria-label="Primary">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-20">
+      <a href="#home" class="flex items-center gap-2.5 group" aria-label="Ember & Oak home">
+        <span class="relative flex items-center justify-center w-10 h-10 rounded-full bg-gold-gradient shadow-gold">
+          <i class="fa-solid fa-fire text-charcoal text-base"></i>
+        </span>
+        <span class="font-display text-xl sm:text-2xl font-bold text-white tracking-wide">Ember <span class="text-gold">&amp;</span> Oak</span>
+      </a>
+
+      <ul class="hidden lg:flex items-center gap-8 font-accent text-sm font-medium text-white/85">
+        <li><a href="#home" class="nav-link hover:text-gold transition-colors">Home</a></li>
+        <li><a href="#about" class="nav-link hover:text-gold transition-colors">About</a></li>
+        <li><a href="#menu" class="nav-link hover:text-gold transition-colors">Menu</a></li>
+        <li><a href="#offers" class="nav-link hover:text-gold transition-colors">Special Offers</a></li>
+        <li><a href="#gallery" class="nav-link hover:text-gold transition-colors">Gallery</a></li>
+        <li><a href="#testimonials" class="nav-link hover:text-gold transition-colors">Testimonials</a></li>
+        <li><a href="#reservation" class="nav-link hover:text-gold transition-colors">Reservation</a></li>
+        <li><a href="#contact" class="nav-link hover:text-gold transition-colors">Contact</a></li>
+      </ul>
+
+      <div class="flex items-center gap-3">
+        <a href="#reservation" class="hidden md:inline-flex btn-primary font-accent text-sm font-semibold text-charcoal px-5 py-2.5 rounded-full">
+          <i class="fa-solid fa-utensils mr-2"></i>Book a Table
+        </a>
+        <button id="menuToggle" class="lg:hidden flex items-center justify-center w-11 h-11 rounded-full glass text-white" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Mobile drawer overlay + panel -->
+<div id="drawerOverlay" class="fixed inset-0 bg-charcoal-deep/70 z-50 lg:hidden"></div>
+<aside id="mobileDrawer" class="fixed top-0 right-0 h-full w-[82%] max-w-sm bg-charcoal z-50 lg:hidden shadow-2xl flex flex-col" aria-label="Mobile navigation" aria-hidden="true">
+  <div class="flex items-center justify-between px-6 h-20 border-b border-white/10">
+    <span class="font-display text-xl font-bold text-white">Ember <span class="text-gold">&amp;</span> Oak</span>
+    <button id="drawerClose" class="w-10 h-10 rounded-full glass text-white flex items-center justify-center" aria-label="Close menu">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+  <ul class="flex flex-col gap-1 px-4 py-6 font-accent text-white/90 text-base overflow-y-auto">
+    <li><a href="#home" class="drawer-link block px-3 py-3.5 rounded-xl hover:bg-white/5 hover:text-gold transition-colors">Home</a></li>
+    <li><a href="#about" class="drawer-link block px-3 py-3.5 rounded-xl hover:bg-white/5 hover:text-gold transition-colors">About</a></li>
+    <li><a href="#menu" class="drawer-link block px-3 py-3.5 rounded-xl hover:bg-white/5 hover:text-gold transition-colors">Menu</a></li>
+    <li><a href="#offers" class="drawer-link block px-3 py-3.5 rounded-xl hover:bg-white/5 hover:text-gold transition-colors">Special Offers</a></li>
+    <li><a href="#gallery" class="drawer-link block px-3 py-3.5 rounded-xl hover:bg-white/5 hover:text-gold transition-colors">Gallery</a></li>
+    <li><a href="#testimonials" class="drawer-link block px-3 py-3.5 rounded-xl hover:bg-white/5 hover:text-gold transition-colors">Testimonials</a></li>
+    <li><a href="#reservation" class="drawer-link block px-3 py-3.5 rounded-xl hover:bg-white/5 hover:text-gold transition-colors">Reservation</a></li>
+    <li><a href="#contact" class="drawer-link block px-3 py-3.5 rounded-xl hover:bg-white/5 hover:text-gold transition-colors">Contact</a></li>
+  </ul>
+  <div class="mt-auto p-6 border-t border-white/10">
+    <a href="#reservation" class="drawer-link btn-primary font-accent text-sm font-semibold text-charcoal px-5 py-3.5 rounded-full w-full inline-flex items-center justify-center">
+      <i class="fa-solid fa-utensils mr-2"></i>Book a Table
+    </a>
+  </div>
+</aside>
+
+<main id="main">
+<!-- ============ HERO ============ -->
+<section id="home" class="relative min-h-screen flex items-center overflow-hidden bg-charcoal-deep">
+  <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1740&q=80" alt="Wood-fired dishes plated on a dark table" class="absolute inset-0 w-full h-full object-cover opacity-45" loading="eager" onerror="this.style.display='none'">
+  <div class="absolute inset-0 bg-char-gradient"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-charcoal-deep/90 via-charcoal-deep/50 to-transparent"></div>
+  <canvas id="emberCanvas" class="ember-canvas" aria-hidden="true"></canvas>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pt-32 pb-24 w-full">
+    <div class="max-w-2xl">
+      <p class="reveal font-accent tracking-[0.3em] text-gold text-xs sm:text-sm font-semibold uppercase mb-5">Wood-Fired &middot; Farm to Flame</p>
+      <h1 class="reveal font-display text-white text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] mb-6">
+        Where Fire Meets <span class="text-gold-gradient italic">Flavor.</span>
+      </h1>
+      <p class="reveal font-body text-white/75 text-base sm:text-lg leading-relaxed max-w-xl mb-9" style="transition-delay:.1s">
+        An open-flame kitchen turning seasonal, local ingredients into unforgettable plates — paired with a cellar of oak-aged wines, nightly, in the heart of the city.
+      </p>
+      <div class="reveal flex flex-col sm:flex-row gap-4" style="transition-delay:.2s">
+        <a href="#menu" class="btn-primary font-accent font-semibold text-charcoal px-8 py-4 rounded-full text-center">
+          View Menu <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+        </a>
+        <a href="#reservation" class="btn-secondary font-accent font-semibold text-white px-8 py-4 rounded-full text-center">
+          Reserve Table <i class="fa-solid fa-calendar-check ml-2 text-sm"></i>
+        </a>
+      </div>
+
+      <div class="reveal flex items-center gap-6 mt-12" style="transition-delay:.3s">
+        <div class="flex -space-x-3">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" class="w-10 h-10 rounded-full border-2 border-charcoal-deep object-cover" alt="" loading="lazy" onerror="this.style.display='none'">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" class="w-10 h-10 rounded-full border-2 border-charcoal-deep object-cover" alt="" loading="lazy" onerror="this.style.display='none'">
+          <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?auto=format&fit=crop&w=100&q=80" class="w-10 h-10 rounded-full border-2 border-charcoal-deep object-cover" alt="" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <p class="font-body text-white/70 text-sm"><span class="text-gold font-semibold">4.9</span> from 2,300+ diners</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating food cards -->
+  <div class="hidden xl:block absolute right-16 top-40 z-10 animate-float-slow">
+    <div class="glass rounded-2xl p-4 w-56 shadow-2xl">
+      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80" class="w-full h-28 object-cover rounded-xl mb-3" alt="Wood-fired margherita pizza" loading="lazy" onerror="this.parentElement.style.display='none'">
+      <p class="font-accent text-white text-sm font-semibold">Chef's Pick</p>
+      <p class="font-display text-white text-lg italic">Charred Octopus</p>
+      <div class="flex items-center gap-1 mt-1 text-gold text-xs">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+        <span class="text-white/60 ml-1">4.9</span>
+      </div>
+    </div>
+  </div>
+  <div class="hidden xl:block absolute right-40 bottom-24 z-10 animate-float-slower">
+    <div class="glass rounded-2xl px-5 py-4 shadow-2xl flex items-center gap-3">
+      <div class="w-11 h-11 rounded-full bg-gold-gradient flex items-center justify-center text-charcoal">
+        <i class="fa-solid fa-users"></i>
+      </div>
+      <div>
+        <p class="font-display text-white text-lg font-bold leading-none">2,300+</p>
+        <p class="font-accent text-white/60 text-xs mt-1">Happy Guests</p>
+      </div>
+    </div>
+  </div>
+
+  <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 hover:text-gold transition-colors animate-bounce" aria-label="Scroll to About section">
+    <i class="fa-solid fa-chevron-down text-xl"></i>
+  </a>
+</section>
+<!-- ============ ABOUT ============ -->
+<section id="about" class="relative py-24 sm:py-32 bg-mist overflow-hidden">
+  <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-gold/10 blur-3xl"></div>
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+
+      <div class="reveal-left relative">
+        <div class="relative rounded-3xl overflow-hidden shadow-soft aspect-[4/5] bg-gradient-to-br from-charcoal to-charcoal-light">
+          <img src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?auto=format&fit=crop&w=1000&q=80" alt="Executive chef tending an open flame grill" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <div class="hidden sm:flex absolute -bottom-8 -right-6 glass-light rounded-2xl shadow-xl px-6 py-5 items-center gap-4">
+          <div class="w-14 h-14 rounded-full bg-gold-gradient flex items-center justify-center text-charcoal text-xl">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+          </div>
+          <div>
+            <p class="font-display text-2xl font-bold text-charcoal leading-none">12</p>
+            <p class="font-accent text-xs text-charcoal/60 mt-1 tracking-wide">Years Around<br>One Fire</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-right">
+        <p class="font-accent tracking-[0.3em] text-ember text-xs sm:text-sm font-semibold uppercase mb-4">Our Story</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold text-charcoal leading-tight mb-6">Twelve Years Around <span class="text-gold-gradient italic">One Fire</span></h2>
+        <p class="font-body text-charcoal/70 leading-relaxed mb-4">
+          Ember & Oak began as a single wood-burning hearth and a simple idea: let the fire do the talking. Every dish that leaves our kitchen touches an open flame — grilled, charred, smoked, or roasted over oak and applewood sourced from local orchards.
+        </p>
+        <p class="font-body text-charcoal/70 leading-relaxed mb-8">
+          Chef Elena Marchetti leads a team devoted to seasonal menus, hand-selected produce, and recipes passed down through three generations — reimagined for the modern table.
+        </p>
+
+        <div class="grid sm:grid-cols-2 gap-4 mb-9">
+          <div class="flex items-start gap-3">
+            <span class="mt-1 w-8 h-8 shrink-0 rounded-full bg-gold/15 text-gold flex items-center justify-center"><i class="fa-solid fa-check text-xs"></i></span>
+            <p class="font-body text-sm text-charcoal/70">Open-flame cooking on every plate</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-1 w-8 h-8 shrink-0 rounded-full bg-gold/15 text-gold flex items-center justify-center"><i class="fa-solid fa-check text-xs"></i></span>
+            <p class="font-body text-sm text-charcoal/70">Produce sourced within 100 miles</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-1 w-8 h-8 shrink-0 rounded-full bg-gold/15 text-gold flex items-center justify-center"><i class="fa-solid fa-check text-xs"></i></span>
+            <p class="font-body text-sm text-charcoal/70">Hand-selected oak &amp; applewood</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-1 w-8 h-8 shrink-0 rounded-full bg-gold/15 text-gold flex items-center justify-center"><i class="fa-solid fa-check text-xs"></i></span>
+            <p class="font-body text-sm text-charcoal/70">Three generations of family recipes</p>
+          </div>
+        </div>
+
+        <a href="#reservation" class="btn-primary inline-flex items-center font-accent font-semibold text-charcoal px-7 py-3.5 rounded-full">
+          Reserve Your Table <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ FEATURED MENU ============ -->
+<section id="menu" class="relative py-24 sm:py-32 bg-white">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto mb-16">
+      <p class="font-accent tracking-[0.3em] text-ember text-xs sm:text-sm font-semibold uppercase mb-4">The Menu</p>
+      <h2 class="font-display text-4xl sm:text-5xl font-bold text-charcoal mb-5">Straight From the Flame</h2>
+      <div class="divider-gold mx-auto mb-5"></div>
+      <p class="font-body text-charcoal/60">A rotating, seasonal selection — every plate finished over live fire.</p>
+    </div>
+
+    <div class="reveal-stagger grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <article class="card-hover glow-hover bg-mist rounded-2xl overflow-hidden border border-transparent">
+        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-charcoal to-charcoal-light">
+          <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=600&q=80" alt="Charred octopus with smoked paprika" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" onerror="this.style.display='none'">
+          <span class="absolute top-3 left-3 bg-charcoal/80 text-gold text-xs font-accent font-semibold px-3 py-1 rounded-full">Starter</span>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <h3 class="font-display text-lg font-bold text-charcoal">Charred Octopus</h3>
+            <span class="font-accent font-bold text-gold whitespace-nowrap">$18</span>
+          </div>
+          <p class="font-body text-sm text-charcoal/60 mb-3">Smoked paprika, lemon confit, fingerling potato</p>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-gold text-xs"><i class="fa-solid fa-star"></i><span class="text-charcoal/70 ml-0.5">4.9</span></span>
+            <button class="font-accent text-xs font-semibold text-charcoal bg-gold/90 hover:bg-gold px-4 py-2 rounded-full transition-colors">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card-hover glow-hover bg-mist rounded-2xl overflow-hidden border border-transparent">
+        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-charcoal to-charcoal-light">
+          <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=600&q=80" alt="Oak-smoked dry-aged ribeye steak" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" onerror="this.style.display='none'">
+          <span class="absolute top-3 left-3 bg-charcoal/80 text-gold text-xs font-accent font-semibold px-3 py-1 rounded-full">Signature</span>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <h3 class="font-display text-lg font-bold text-charcoal">Oak-Smoked Ribeye</h3>
+            <span class="font-accent font-bold text-gold whitespace-nowrap">$58</span>
+          </div>
+          <p class="font-body text-sm text-charcoal/60 mb-3">28-day dry aged, bone marrow butter</p>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-gold text-xs"><i class="fa-solid fa-star"></i><span class="text-charcoal/70 ml-0.5">5.0</span></span>
+            <button class="font-accent text-xs font-semibold text-charcoal bg-gold/90 hover:bg-gold px-4 py-2 rounded-full transition-colors">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card-hover glow-hover bg-mist rounded-2xl overflow-hidden border border-transparent">
+        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-charcoal to-charcoal-light">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Wood-fired margherita pizza" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" onerror="this.style.display='none'">
+          <span class="absolute top-3 left-3 bg-charcoal/80 text-gold text-xs font-accent font-semibold px-3 py-1 rounded-full">Wood-Fired</span>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <h3 class="font-display text-lg font-bold text-charcoal">Wood-Fired Margherita</h3>
+            <span class="font-accent font-bold text-gold whitespace-nowrap">$22</span>
+          </div>
+          <p class="font-body text-sm text-charcoal/60 mb-3">San Marzano, fior di latte, basil oil</p>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-gold text-xs"><i class="fa-solid fa-star"></i><span class="text-charcoal/70 ml-0.5">4.8</span></span>
+            <button class="font-accent text-xs font-semibold text-charcoal bg-gold/90 hover:bg-gold px-4 py-2 rounded-full transition-colors">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card-hover glow-hover bg-mist rounded-2xl overflow-hidden border border-transparent">
+        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-charcoal to-charcoal-light">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80" alt="Burnt honey tart with smoked vanilla ice cream" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" onerror="this.style.display='none'">
+          <span class="absolute top-3 left-3 bg-charcoal/80 text-gold text-xs font-accent font-semibold px-3 py-1 rounded-full">Dessert</span>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <h3 class="font-display text-lg font-bold text-charcoal">Burnt Honey Tart</h3>
+            <span class="font-accent font-bold text-gold whitespace-nowrap">$12</span>
+          </div>
+          <p class="font-body text-sm text-charcoal/60 mb-3">Salted caramel, smoked vanilla ice cream</p>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-gold text-xs"><i class="fa-solid fa-star"></i><span class="text-charcoal/70 ml-0.5">5.0</span></span>
+            <button class="font-accent text-xs font-semibold text-charcoal bg-gold/90 hover:bg-gold px-4 py-2 rounded-full transition-colors">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card-hover glow-hover bg-mist rounded-2xl overflow-hidden border border-transparent">
+        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-charcoal to-charcoal-light">
+          <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80" alt="Ember roasted salmon with charred fennel" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" onerror="this.style.display='none'">
+          <span class="absolute top-3 left-3 bg-charcoal/80 text-gold text-xs font-accent font-semibold px-3 py-1 rounded-full">Main</span>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <h3 class="font-display text-lg font-bold text-charcoal">Ember Roasted Salmon</h3>
+            <span class="font-accent font-bold text-gold whitespace-nowrap">$26</span>
+          </div>
+          <p class="font-body text-sm text-charcoal/60 mb-3">Citrus glaze, charred fennel, dill oil</p>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-gold text-xs"><i class="fa-solid fa-star"></i><span class="text-charcoal/70 ml-0.5">4.8</span></span>
+            <button class="font-accent text-xs font-semibold text-charcoal bg-gold/90 hover:bg-gold px-4 py-2 rounded-full transition-colors">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card-hover glow-hover bg-mist rounded-2xl overflow-hidden border border-transparent">
+        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-charcoal to-charcoal-light">
+          <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=600&q=80" alt="Truffle oak risotto with wild mushroom" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" onerror="this.style.display='none'">
+          <span class="absolute top-3 left-3 bg-charcoal/80 text-gold text-xs font-accent font-semibold px-3 py-1 rounded-full">Main</span>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <h3 class="font-display text-lg font-bold text-charcoal">Truffle Oak Risotto</h3>
+            <span class="font-accent font-bold text-gold whitespace-nowrap">$24</span>
+          </div>
+          <p class="font-body text-sm text-charcoal/60 mb-3">Wild mushroom, aged parmesan</p>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-gold text-xs"><i class="fa-solid fa-star"></i><span class="text-charcoal/70 ml-0.5">4.9</span></span>
+            <button class="font-accent text-xs font-semibold text-charcoal bg-gold/90 hover:bg-gold px-4 py-2 rounded-full transition-colors">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card-hover glow-hover bg-mist rounded-2xl overflow-hidden border border-transparent">
+        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-charcoal to-charcoal-light">
+          <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?auto=format&fit=crop&w=600&q=80" alt="Flame seared duck breast with cherry gastrique" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" onerror="this.style.display='none'">
+          <span class="absolute top-3 left-3 bg-charcoal/80 text-gold text-xs font-accent font-semibold px-3 py-1 rounded-full">Main</span>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <h3 class="font-display text-lg font-bold text-charcoal">Flame-Seared Duck</h3>
+            <span class="font-accent font-bold text-gold whitespace-nowrap">$32</span>
+          </div>
+          <p class="font-body text-sm text-charcoal/60 mb-3">Cherry gastrique, roasted root vegetables</p>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-gold text-xs"><i class="fa-solid fa-star"></i><span class="text-charcoal/70 ml-0.5">4.9</span></span>
+            <button class="font-accent text-xs font-semibold text-charcoal bg-gold/90 hover:bg-gold px-4 py-2 rounded-full transition-colors">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card-hover glow-hover bg-mist rounded-2xl overflow-hidden border border-transparent">
+        <div class="relative h-48 overflow-hidden bg-gradient-to-br from-charcoal to-charcoal-light">
+          <img src="https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=600&q=80" alt="Burnt honey carrots with whipped goat cheese" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" loading="lazy" onerror="this.style.display='none'">
+          <span class="absolute top-3 left-3 bg-charcoal/80 text-gold text-xs font-accent font-semibold px-3 py-1 rounded-full">Side</span>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <h3 class="font-display text-lg font-bold text-charcoal">Burnt Honey Carrots</h3>
+            <span class="font-accent font-bold text-gold whitespace-nowrap">$14</span>
+          </div>
+          <p class="font-body text-sm text-charcoal/60 mb-3">Whipped goat cheese, hazelnut dukkah</p>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-gold text-xs"><i class="fa-solid fa-star"></i><span class="text-charcoal/70 ml-0.5">4.7</span></span>
+            <button class="font-accent text-xs font-semibold text-charcoal bg-gold/90 hover:bg-gold px-4 py-2 rounded-full transition-colors">Order Now</button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="reveal text-center mt-14">
+      <a href="#reservation" class="btn-secondary inline-flex items-center font-accent font-semibold text-charcoal border-charcoal/25 px-8 py-3.5 rounded-full hover:!text-charcoal">
+        View Full Menu <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+      </a>
+    </div>
+  </div>
+</section>
+<!-- ============ SPECIAL OFFERS ============ -->
+<section id="offers" class="relative py-24 sm:py-32 bg-charcoal-deep overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-ember/10 via-transparent to-gold/10"></div>
+  <div class="absolute top-0 right-0 w-[30rem] h-[30rem] bg-ember/10 rounded-full blur-3xl"></div>
+  <div class="relative max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto mb-16">
+      <p class="font-accent tracking-[0.3em] text-gold text-xs sm:text-sm font-semibold uppercase mb-4">Special Offers</p>
+      <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mb-5">Limited-Time Fire Deals</h2>
+      <div class="divider-gold mx-auto"></div>
+    </div>
+
+    <div class="reveal-stagger grid md:grid-cols-3 gap-7">
+      <div class="glass rounded-3xl p-7 card-hover relative overflow-hidden">
+        <span class="absolute -top-1 -right-1 bg-gold-gradient text-charcoal font-accent text-xs font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-3xl">20% OFF</span>
+        <div class="w-14 h-14 rounded-2xl bg-gold/15 text-gold flex items-center justify-center text-xl mb-5">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <h3 class="font-display text-2xl font-bold text-white mb-2">Date Night Duo</h3>
+        <p class="font-body text-white/60 text-sm mb-5">Two mains, a shared dessert, and a bottle of oak-aged wine — Thursday through Sunday evenings.</p>
+        <div class="flex items-center gap-3 mb-6 offer-countdown" data-deadline-days="2" data-deadline-hours="6">
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-days font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">DAYS</span></div>
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-hours font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">HRS</span></div>
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-mins font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">MIN</span></div>
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-secs font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">SEC</span></div>
+        </div>
+        <button class="w-full btn-primary font-accent font-semibold text-charcoal py-3 rounded-full">Order Now</button>
+      </div>
+
+      <div class="glass rounded-3xl p-7 card-hover relative overflow-hidden md:scale-105 border border-gold/30">
+        <span class="absolute -top-1 -right-1 bg-gold-gradient text-charcoal font-accent text-xs font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-3xl">15% OFF</span>
+        <div class="w-14 h-14 rounded-2xl bg-gold/15 text-gold flex items-center justify-center text-xl mb-5">
+          <i class="fa-solid fa-sun"></i>
+        </div>
+        <h3 class="font-display text-2xl font-bold text-white mb-2">Weekday Fire Lunch</h3>
+        <p class="font-body text-white/60 text-sm mb-5">A three-course midday menu, fired fast without cutting corners. Monday–Friday, 11:30am–2pm.</p>
+        <div class="flex items-center gap-3 mb-6 offer-countdown" data-deadline-days="0" data-deadline-hours="9">
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-days font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">DAYS</span></div>
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-hours font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">HRS</span></div>
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-mins font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">MIN</span></div>
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-secs font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">SEC</span></div>
+        </div>
+        <button class="w-full btn-primary font-accent font-semibold text-charcoal py-3 rounded-full">Order Now</button>
+      </div>
+
+      <div class="glass rounded-3xl p-7 card-hover relative overflow-hidden">
+        <span class="absolute -top-1 -right-1 bg-gold-gradient text-charcoal font-accent text-xs font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-3xl">FREE PAIRING</span>
+        <div class="w-14 h-14 rounded-2xl bg-gold/15 text-gold flex items-center justify-center text-xl mb-5">
+          <i class="fa-solid fa-champagne-glasses"></i>
+        </div>
+        <h3 class="font-display text-2xl font-bold text-white mb-2">Chef's Table Experience</h3>
+        <p class="font-body text-white/60 text-sm mb-5">Six courses at the fire-side counter, with a complimentary wine pairing for the table.</p>
+        <div class="flex items-center gap-3 mb-6 offer-countdown" data-deadline-days="4" data-deadline-hours="0">
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-days font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">DAYS</span></div>
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-hours font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">HRS</span></div>
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-mins font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">MIN</span></div>
+          <div class="text-center bg-white/5 rounded-lg px-3 py-2 min-w-[3.2rem]"><span class="cd-secs font-display text-lg font-bold text-gold block">--</span><span class="text-[10px] text-white/50 font-accent">SEC</span></div>
+        </div>
+        <button class="w-full btn-primary font-accent font-semibold text-charcoal py-3 rounded-full">Order Now</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY CHOOSE US ============ -->
+<section class="relative py-24 sm:py-32 bg-mist">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto mb-16">
+      <p class="font-accent tracking-[0.3em] text-ember text-xs sm:text-sm font-semibold uppercase mb-4">Why Choose Us</p>
+      <h2 class="font-display text-4xl sm:text-5xl font-bold text-charcoal mb-5">The Ember &amp; Oak Standard</h2>
+      <div class="divider-gold mx-auto"></div>
+    </div>
+
+    <div class="reveal-stagger grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="card-hover glow-hover bg-white rounded-2xl p-7 border border-charcoal/5">
+        <div class="w-14 h-14 rounded-2xl bg-gold-gradient text-charcoal flex items-center justify-center text-xl mb-5"><i class="fa-solid fa-carrot"></i></div>
+        <h3 class="font-display text-xl font-bold text-charcoal mb-2">Fresh Ingredients</h3>
+        <p class="font-body text-sm text-charcoal/60">Produce delivered daily from growers within 100 miles of our kitchen.</p>
+      </div>
+      <div class="card-hover glow-hover bg-white rounded-2xl p-7 border border-charcoal/5">
+        <div class="w-14 h-14 rounded-2xl bg-gold-gradient text-charcoal flex items-center justify-center text-xl mb-5"><i class="fa-solid fa-kitchen-set"></i></div>
+        <h3 class="font-display text-xl font-bold text-charcoal mb-2">Professional Chefs</h3>
+        <p class="font-body text-sm text-charcoal/60">A kitchen brigade trained across three continents of open-fire cooking.</p>
+      </div>
+      <div class="card-hover glow-hover bg-white rounded-2xl p-7 border border-charcoal/5">
+        <div class="w-14 h-14 rounded-2xl bg-gold-gradient text-charcoal flex items-center justify-center text-xl mb-5"><i class="fa-solid fa-motorcycle"></i></div>
+        <h3 class="font-display text-xl font-bold text-charcoal mb-2">Fast Delivery</h3>
+        <p class="font-body text-sm text-charcoal/60">Hot, fire-fresh dishes to your door in 30 minutes or less, citywide.</p>
+      </div>
+      <div class="card-hover glow-hover bg-white rounded-2xl p-7 border border-charcoal/5">
+        <div class="w-14 h-14 rounded-2xl bg-gold-gradient text-charcoal flex items-center justify-center text-xl mb-5"><i class="fa-solid fa-couch"></i></div>
+        <h3 class="font-display text-xl font-bold text-charcoal mb-2">Cozy Environment</h3>
+        <p class="font-body text-sm text-charcoal/60">Warm lighting, oak furnishings, and a hearth you can feel from every seat.</p>
+      </div>
+      <div class="card-hover glow-hover bg-white rounded-2xl p-7 border border-charcoal/5">
+        <div class="w-14 h-14 rounded-2xl bg-gold-gradient text-charcoal flex items-center justify-center text-xl mb-5"><i class="fa-solid fa-tags"></i></div>
+        <h3 class="font-display text-xl font-bold text-charcoal mb-2">Affordable Pricing</h3>
+        <p class="font-body text-sm text-charcoal/60">Fine-dining flavor with a menu built to be enjoyed more than once a year.</p>
+      </div>
+      <div class="card-hover glow-hover bg-white rounded-2xl p-7 border border-charcoal/5">
+        <div class="w-14 h-14 rounded-2xl bg-gold-gradient text-charcoal flex items-center justify-center text-xl mb-5"><i class="fa-solid fa-calendar-check"></i></div>
+        <h3 class="font-display text-xl font-bold text-charcoal mb-2">24/7 Online Reservation</h3>
+        <p class="font-body text-sm text-charcoal/60">Book your table any hour, any day — confirmed within minutes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ TESTIMONIALS ============ -->
+<section id="testimonials" class="relative py-24 sm:py-32 bg-white overflow-hidden">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[24rem] leading-none text-gold/5 font-display select-none pointer-events-none" aria-hidden="true">&rdquo;</div>
+  <div class="relative max-w-4xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-center mb-14">
+      <p class="font-accent tracking-[0.3em] text-ember text-xs sm:text-sm font-semibold uppercase mb-4">Testimonials</p>
+      <h2 class="font-display text-4xl sm:text-5xl font-bold text-charcoal mb-5">Guests Keep Coming Back</h2>
+      <div class="divider-gold mx-auto"></div>
+    </div>
+
+    <div class="reveal-zoom relative">
+      <div id="testimonialTrack" class="overflow-hidden">
+        <div id="testimonialSlides" class="flex transition-transform duration-700 ease-out">
+
+          <div class="w-full shrink-0 px-3">
+            <div class="glass-light bg-mist rounded-3xl p-8 sm:p-10 text-center shadow-soft">
+              <div class="flex justify-center gap-1 text-gold mb-5">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="font-display italic text-xl sm:text-2xl text-charcoal leading-relaxed mb-7">"The ribeye alone is worth the trip, but it's the little touches — the bread, the service, the fire crackling nearby — that brought us back three times this month."</p>
+              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" class="w-14 h-14 rounded-full object-cover mx-auto mb-3" alt="" loading="lazy" onerror="this.style.display='none'">
+              <p class="font-accent font-semibold text-charcoal">Priya Shah</p>
+              <p class="font-body text-xs text-charcoal/50">Verified Diner</p>
+            </div>
+          </div>
+
+          <div class="w-full shrink-0 px-3">
+            <div class="glass-light bg-mist rounded-3xl p-8 sm:p-10 text-center shadow-soft">
+              <div class="flex justify-center gap-1 text-gold mb-5">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="font-display italic text-xl sm:text-2xl text-charcoal leading-relaxed mb-7">"Booked the chef's table for our anniversary and it might be the best meal we've had all year. Every course had a story behind it."</p>
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" class="w-14 h-14 rounded-full object-cover mx-auto mb-3" alt="" loading="lazy" onerror="this.style.display='none'">
+              <p class="font-accent font-semibold text-charcoal">Marcus Webb</p>
+              <p class="font-body text-xs text-charcoal/50">Verified Diner</p>
+            </div>
+          </div>
+
+          <div class="w-full shrink-0 px-3">
+            <div class="glass-light bg-mist rounded-3xl p-8 sm:p-10 text-center shadow-soft">
+              <div class="flex justify-center gap-1 text-gold mb-5">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+              </div>
+              <p class="font-display italic text-xl sm:text-2xl text-charcoal leading-relaxed mb-7">"The wood-fired margherita converted my pickiest friend into a regular. Cozy room, warm staff, and that smoky finish on everything."</p>
+              <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?auto=format&fit=crop&w=100&q=80" class="w-14 h-14 rounded-full object-cover mx-auto mb-3" alt="" loading="lazy" onerror="this.style.display='none'">
+              <p class="font-accent font-semibold text-charcoal">Aiko Tanaka</p>
+              <p class="font-body text-xs text-charcoal/50">Verified Diner</p>
+            </div>
+          </div>
+
+          <div class="w-full shrink-0 px-3">
+            <div class="glass-light bg-mist rounded-3xl p-8 sm:p-10 text-center shadow-soft">
+              <div class="flex justify-center gap-1 text-gold mb-5">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+              </div>
+              <p class="font-display italic text-xl sm:text-2xl text-charcoal leading-relaxed mb-7">"Online reservations were effortless and the table was ready the second we walked in. Rare to get that kind of consistency."</p>
+              <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=100&q=80" class="w-14 h-14 rounded-full object-cover mx-auto mb-3" alt="" loading="lazy" onerror="this.style.display='none'">
+              <p class="font-accent font-semibold text-charcoal">Daniel Osei</p>
+              <p class="font-body text-xs text-charcoal/50">Verified Diner</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <button id="testiPrev" class="hidden sm:flex absolute top-1/2 -left-4 lg:-left-14 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-soft items-center justify-center text-charcoal hover:text-gold transition-colors" aria-label="Previous testimonial">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button id="testiNext" class="hidden sm:flex absolute top-1/2 -right-4 lg:-right-14 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-soft items-center justify-center text-charcoal hover:text-gold transition-colors" aria-label="Next testimonial">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+
+      <div id="testiDots" class="flex justify-center gap-2 mt-8"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section id="gallery" class="relative py-24 sm:py-32 bg-mist">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto mb-14">
+      <p class="font-accent tracking-[0.3em] text-ember text-xs sm:text-sm font-semibold uppercase mb-4">Gallery</p>
+      <h2 class="font-display text-4xl sm:text-5xl font-bold text-charcoal mb-5">A Taste of the Room</h2>
+      <div class="divider-gold mx-auto"></div>
+    </div>
+
+    <div class="masonry reveal">
+      <div class="group relative rounded-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=700&q=80" alt="Flat lay of wood-fired dishes" class="w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass-plus text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+        </div>
+      </div>
+      <div class="group relative rounded-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=700&q=80" alt="Candlelit restaurant dining room" class="w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass-plus text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+        </div>
+      </div>
+      <div class="group relative rounded-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=700&q=80" alt="Fresh pasta dish plated" class="w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass-plus text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+        </div>
+      </div>
+      <div class="group relative rounded-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=700&q=80" alt="Plated steak dinner" class="w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass-plus text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+        </div>
+      </div>
+      <div class="group relative rounded-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?auto=format&fit=crop&w=700&q=80" alt="Chef tending the open flame grill" class="w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass-plus text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+        </div>
+      </div>
+      <div class="group relative rounded-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=700&q=80" alt="Dessert with smoked vanilla ice cream" class="w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass-plus text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+        </div>
+      </div>
+      <div class="group relative rounded-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=700&q=80" alt="Bar and dining area ambiance" class="w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass-plus text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+        </div>
+      </div>
+      <div class="group relative rounded-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=700&q=80" alt="Charred octopus starter" class="w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass-plus text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+        </div>
+      </div>
+      <div class="group relative rounded-2xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80" alt="Noodle dish with fresh herbs" class="w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass-plus text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ RESERVATION ============ -->
+<section id="reservation" class="relative py-24 sm:py-32 bg-charcoal-deep overflow-hidden">
+  <img src="https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=1600&q=80" alt="" class="absolute inset-0 w-full h-full object-cover opacity-20" loading="lazy" onerror="this.style.display='none'">
+  <div class="absolute inset-0 bg-gradient-to-b from-charcoal-deep via-charcoal-deep/95 to-charcoal-deep"></div>
+  <canvas id="emberCanvas2" class="ember-canvas" aria-hidden="true"></canvas>
+
+  <div class="relative max-w-5xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto mb-14">
+      <p class="font-accent tracking-[0.3em] text-gold text-xs sm:text-sm font-semibold uppercase mb-4">Reservation</p>
+      <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mb-5">Reserve Your Table</h2>
+      <p class="font-body text-white/60">Tell us when, and we'll have the fire ready. Confirmation within two hours.</p>
+    </div>
+
+    <form id="reservationForm" class="reveal-zoom glass rounded-3xl p-6 sm:p-10 grid sm:grid-cols-2 gap-5" novalidate>
+      <div class="sm:col-span-1">
+        <label for="resName" class="block font-accent text-xs font-semibold text-white/70 mb-2 uppercase tracking-wide">Full Name</label>
+        <input id="resName" name="name" type="text" required placeholder="Jane Doe" class="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder-white/35 focus:border-gold outline-none transition-colors">
+      </div>
+      <div class="sm:col-span-1">
+        <label for="resEmail" class="block font-accent text-xs font-semibold text-white/70 mb-2 uppercase tracking-wide">Email</label>
+        <input id="resEmail" name="email" type="email" required placeholder="jane@email.com" class="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder-white/35 focus:border-gold outline-none transition-colors">
+      </div>
+      <div class="sm:col-span-1">
+        <label for="resPhone" class="block font-accent text-xs font-semibold text-white/70 mb-2 uppercase tracking-wide">Phone</label>
+        <input id="resPhone" name="phone" type="tel" required placeholder="(555) 123-4567" class="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder-white/35 focus:border-gold outline-none transition-colors">
+      </div>
+      <div class="sm:col-span-1">
+        <label for="resGuests" class="block font-accent text-xs font-semibold text-white/70 mb-2 uppercase tracking-wide">Guests</label>
+        <select id="resGuests" name="guests" required class="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3.5 text-white focus:border-gold outline-none transition-colors">
+          <option class="bg-charcoal" value="">Select guests</option>
+          <option class="bg-charcoal" value="1">1 Guest</option>
+          <option class="bg-charcoal" value="2">2 Guests</option>
+          <option class="bg-charcoal" value="3">3 Guests</option>
+          <option class="bg-charcoal" value="4">4 Guests</option>
+          <option class="bg-charcoal" value="5">5 Guests</option>
+          <option class="bg-charcoal" value="6">6 Guests</option>
+          <option class="bg-charcoal" value="7+">7+ Guests</option>
+        </select>
+      </div>
+      <div class="sm:col-span-1">
+        <label for="resDate" class="block font-accent text-xs font-semibold text-white/70 mb-2 uppercase tracking-wide">Date</label>
+        <input id="resDate" name="date" type="date" required class="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3.5 text-white focus:border-gold outline-none transition-colors">
+      </div>
+      <div class="sm:col-span-1">
+        <label for="resTime" class="block font-accent text-xs font-semibold text-white/70 mb-2 uppercase tracking-wide">Time</label>
+        <input id="resTime" name="time" type="time" required class="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3.5 text-white focus:border-gold outline-none transition-colors">
+      </div>
+      <div class="sm:col-span-2">
+        <label for="resMessage" class="block font-accent text-xs font-semibold text-white/70 mb-2 uppercase tracking-wide">Message <span class="text-white/40 normal-case font-normal">(optional)</span></label>
+        <textarea id="resMessage" name="message" rows="3" placeholder="Allergies, celebrations, seating preferences..." class="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3.5 text-white placeholder-white/35 focus:border-gold outline-none transition-colors resize-none"></textarea>
+      </div>
+      <div class="sm:col-span-2 flex flex-col items-center gap-4 pt-2">
+        <button type="submit" class="btn-primary w-full sm:w-auto font-accent font-semibold text-charcoal px-10 py-4 rounded-full">
+          Reserve Now <i class="fa-solid fa-fire ml-2 text-sm"></i>
+        </button>
+        <p id="resFeedback" class="font-body text-sm text-center" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ STATISTICS ============ -->
+<section class="relative py-20 bg-gold-gradient">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal-stagger grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+      <div>
+        <p class="font-display text-4xl sm:text-5xl font-bold text-charcoal"><span class="counter" data-target="25000">0</span>+</p>
+        <p class="font-accent text-xs sm:text-sm font-semibold text-charcoal/70 uppercase tracking-wide mt-2">Happy Customers</p>
+      </div>
+      <div>
+        <p class="font-display text-4xl sm:text-5xl font-bold text-charcoal"><span class="counter" data-target="180000">0</span>+</p>
+        <p class="font-accent text-xs sm:text-sm font-semibold text-charcoal/70 uppercase tracking-wide mt-2">Dishes Served</p>
+      </div>
+      <div>
+        <p class="font-display text-4xl sm:text-5xl font-bold text-charcoal"><span class="counter" data-target="12">0</span></p>
+        <p class="font-accent text-xs sm:text-sm font-semibold text-charcoal/70 uppercase tracking-wide mt-2">Years of Experience</p>
+      </div>
+      <div>
+        <p class="font-display text-4xl sm:text-5xl font-bold text-charcoal"><span class="counter" data-target="14">0</span></p>
+        <p class="font-accent text-xs sm:text-sm font-semibold text-charcoal/70 uppercase tracking-wide mt-2">Professional Chefs</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ NEWSLETTER ============ -->
+<section class="relative py-20 bg-white">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8">
+    <div class="reveal-zoom bg-charcoal rounded-3xl px-6 sm:px-14 py-14 text-center relative overflow-hidden">
+      <div class="absolute -top-10 -right-10 w-52 h-52 bg-gold/10 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-10 -left-10 w-52 h-52 bg-ember/10 rounded-full blur-3xl"></div>
+      <div class="relative">
+        <div class="w-14 h-14 rounded-2xl bg-gold-gradient text-charcoal flex items-center justify-center text-xl mx-auto mb-6"><i class="fa-solid fa-envelope-open-text"></i></div>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mb-3">First Access to Fire Nights</h2>
+        <p class="font-body text-white/60 mb-8 max-w-md mx-auto">Join the list for seasonal menu launches, chef's table openings, and offers before anyone else.</p>
+        <form id="newsletterForm" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" novalidate>
+          <label for="newsletterEmail" class="sr-only">Email address</label>
+          <input id="newsletterEmail" type="email" required placeholder="you@email.com" class="flex-1 bg-white/8 border border-white/15 rounded-full px-5 py-3.5 text-white placeholder-white/35 focus:border-gold outline-none transition-colors">
+          <button type="submit" class="btn-primary font-accent font-semibold text-charcoal px-7 py-3.5 rounded-full whitespace-nowrap">Subscribe</button>
+        </form>
+        <p id="newsFeedback" class="font-body text-sm text-gold mt-4" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="relative py-24 sm:py-32 bg-mist">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="reveal text-center max-w-2xl mx-auto mb-16">
+      <p class="font-accent tracking-[0.3em] text-ember text-xs sm:text-sm font-semibold uppercase mb-4">Contact</p>
+      <h2 class="font-display text-4xl sm:text-5xl font-bold text-charcoal mb-5">Find Us by the Glow</h2>
+      <div class="divider-gold mx-auto"></div>
+    </div>
+
+    <div class="grid lg:grid-cols-5 gap-8">
+      <div class="reveal-left lg:col-span-2 space-y-5">
+        <div class="bg-white rounded-2xl p-6 flex items-start gap-4 border border-charcoal/5 card-hover">
+          <div class="w-11 h-11 rounded-xl bg-gold/15 text-gold flex items-center justify-center shrink-0"><i class="fa-solid fa-location-dot"></i></div>
+          <div>
+            <p class="font-accent font-semibold text-charcoal text-sm">Address</p>
+            <p class="font-body text-charcoal/60 text-sm mt-1">482 Kindling Lane, Riverside District</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 flex items-start gap-4 border border-charcoal/5 card-hover">
+          <div class="w-11 h-11 rounded-xl bg-gold/15 text-gold flex items-center justify-center shrink-0"><i class="fa-solid fa-phone"></i></div>
+          <div>
+            <p class="font-accent font-semibold text-charcoal text-sm">Phone</p>
+            <p class="font-body text-charcoal/60 text-sm mt-1">(555) 018-2947</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 flex items-start gap-4 border border-charcoal/5 card-hover">
+          <div class="w-11 h-11 rounded-xl bg-gold/15 text-gold flex items-center justify-center shrink-0"><i class="fa-solid fa-envelope"></i></div>
+          <div>
+            <p class="font-accent font-semibold text-charcoal text-sm">Email</p>
+            <p class="font-body text-charcoal/60 text-sm mt-1">hello@emberandoak.example</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-charcoal/5 card-hover">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-11 h-11 rounded-xl bg-gold/15 text-gold flex items-center justify-center shrink-0"><i class="fa-solid fa-clock"></i></div>
+            <p class="font-accent font-semibold text-charcoal text-sm">Business Hours</p>
+          </div>
+          <ul class="font-body text-sm text-charcoal/60 space-y-1.5 ml-1">
+            <li class="flex justify-between"><span>Mon – Thu</span><span>4:00 PM – 10:00 PM</span></li>
+            <li class="flex justify-between"><span>Fri – Sat</span><span>12:00 PM – 11:30 PM</span></li>
+            <li class="flex justify-between"><span>Sunday</span><span>12:00 PM – 9:00 PM</span></li>
+          </ul>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" aria-label="Instagram" class="w-11 h-11 rounded-full bg-white border border-charcoal/10 flex items-center justify-center text-charcoal hover:bg-gold hover:text-charcoal hover:border-gold transition-colors"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook" class="w-11 h-11 rounded-full bg-white border border-charcoal/10 flex items-center justify-center text-charcoal hover:bg-gold hover:text-charcoal hover:border-gold transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="X (Twitter)" class="w-11 h-11 rounded-full bg-white border border-charcoal/10 flex items-center justify-center text-charcoal hover:bg-gold hover:text-charcoal hover:border-gold transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Yelp" class="w-11 h-11 rounded-full bg-white border border-charcoal/10 flex items-center justify-center text-charcoal hover:bg-gold hover:text-charcoal hover:border-gold transition-colors"><i class="fa-brands fa-yelp"></i></a>
+        </div>
+      </div>
+
+      <div class="reveal-right lg:col-span-3">
+        <div class="relative h-full min-h-[22rem] rounded-3xl overflow-hidden border border-charcoal/10 bg-gradient-to-br from-charcoal to-charcoal-light flex items-center justify-center">
+          <div class="absolute inset-0 opacity-20" style="background-image:linear-gradient(rgba(255,255,255,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.15) 1px,transparent 1px);background-size:32px 32px;"></div>
+          <div class="relative text-center px-6">
+            <div class="w-16 h-16 rounded-full bg-gold-gradient text-charcoal flex items-center justify-center text-2xl mx-auto mb-4 shadow-gold animate-float-slow">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <p class="font-accent text-white/70 text-sm">Map preview — 482 Kindling Lane</p>
+            <p class="font-body text-white/40 text-xs mt-1">Interactive map loads on your live site</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="relative bg-charcoal-deep pt-20 pb-8">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-14 border-b border-white/10">
+      <div>
+        <a href="#home" class="flex items-center gap-2.5 mb-4">
+          <span class="w-9 h-9 rounded-full bg-gold-gradient flex items-center justify-center"><i class="fa-solid fa-fire text-charcoal text-sm"></i></span>
+          <span class="font-display text-lg font-bold text-white">Ember <span class="text-gold">&amp;</span> Oak</span>
+        </a>
+        <p class="font-body text-sm text-white/50 leading-relaxed">An open-flame kitchen serving seasonal plates and oak-aged wines in the Riverside District.</p>
+      </div>
+      <div>
+        <p class="font-accent font-semibold text-white mb-4 text-sm uppercase tracking-wide">Quick Links</p>
+        <ul class="space-y-2.5 font-body text-sm text-white/50">
+          <li><a href="#about" class="hover:text-gold transition-colors">About Us</a></li>
+          <li><a href="#gallery" class="hover:text-gold transition-colors">Gallery</a></li>
+          <li><a href="#testimonials" class="hover:text-gold transition-colors">Testimonials</a></li>
+          <li><a href="#reservation" class="hover:text-gold transition-colors">Reservation</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-accent font-semibold text-white mb-4 text-sm uppercase tracking-wide">Menu</p>
+        <ul class="space-y-2.5 font-body text-sm text-white/50">
+          <li><a href="#menu" class="hover:text-gold transition-colors">Starters</a></li>
+          <li><a href="#menu" class="hover:text-gold transition-colors">Mains</a></li>
+          <li><a href="#menu" class="hover:text-gold transition-colors">Desserts</a></li>
+          <li><a href="#offers" class="hover:text-gold transition-colors">Special Offers</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-accent font-semibold text-white mb-4 text-sm uppercase tracking-wide">Contact</p>
+        <ul class="space-y-2.5 font-body text-sm text-white/50">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-gold text-xs"></i>482 Kindling Lane</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-phone text-gold text-xs"></i>(555) 018-2947</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-envelope text-gold text-xs"></i>hello@emberandoak.example</li>
+        </ul>
+        <div class="flex gap-3 mt-5">
+          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full glass flex items-center justify-center text-white hover:text-gold transition-colors"><i class="fa-brands fa-instagram text-sm"></i></a>
+          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full glass flex items-center justify-center text-white hover:text-gold transition-colors"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+          <a href="#" aria-label="X (Twitter)" class="w-9 h-9 rounded-full glass flex items-center justify-center text-white hover:text-gold transition-colors"><i class="fa-brands fa-x-twitter text-sm"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8">
+      <p class="font-body text-xs text-white/40">&copy; 2026 Ember &amp; Oak. All rights reserved.</p>
+      <div class="flex gap-6 font-body text-xs text-white/40">
+        <a href="#" class="hover:text-gold transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-gold transition-colors">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to top -->
+<button id="backToTop" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full btn-primary text-charcoal flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300" aria-label="Back to top">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+</main>
+<script>
+(function(){
+  "use strict";
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------- Mobile drawer ---------------- */
+  var menuToggle = document.getElementById('menuToggle');
+  var drawer = document.getElementById('mobileDrawer');
+  var overlay = document.getElementById('drawerOverlay');
+  var drawerClose = document.getElementById('drawerClose');
+
+  function openDrawer(){
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    drawer.setAttribute('aria-hidden','false');
+    menuToggle.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden';
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true');
+    menuToggle.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+  }
+  menuToggle.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-link').forEach(function(el){
+    el.addEventListener('click', closeDrawer);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeDrawer();
+  });
+
+  /* ---------------- Sticky nav shadow ---------------- */
+  var nav = document.getElementById('siteNav');
+  function onScrollNav(){
+    if(window.scrollY > 24){
+      nav.classList.add('shadow-lg');
+    } else {
+      nav.classList.remove('shadow-lg');
+    }
+  }
+  window.addEventListener('scroll', onScrollNav, { passive:true });
+  onScrollNav();
+
+  /* ---------------- Back to top ---------------- */
+  var backToTop = document.getElementById('backToTop');
+  function onScrollTop(){
+    if(window.scrollY > 700){
+      backToTop.classList.remove('opacity-0','pointer-events-none');
+    } else {
+      backToTop.classList.add('opacity-0','pointer-events-none');
+    }
+  }
+  window.addEventListener('scroll', onScrollTop, { passive:true });
+  backToTop.addEventListener('click', function(){
+    window.scrollTo({ top:0, behavior: reducedMotion ? 'auto' : 'smooth' });
+  });
+
+  /* ---------------- Scroll reveal ---------------- */
+  var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-zoom, .reveal-stagger');
+  if('IntersectionObserver' in window && !reducedMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.15, rootMargin:'0px 0px -60px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  /* ---------------- Animated counters ---------------- */
+  var counters = document.querySelectorAll('.counter');
+  function animateCounter(el){
+    var target = parseInt(el.getAttribute('data-target'), 10) || 0;
+    if(reducedMotion){ el.textContent = target.toLocaleString(); return; }
+    var duration = 1800;
+    var startTime = null;
+    function step(ts){
+      if(!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString();
+      if(progress < 1){ requestAnimationFrame(step); }
+      else { el.textContent = target.toLocaleString(); }
+    }
+    requestAnimationFrame(step);
+  }
+  if('IntersectionObserver' in window){
+    var counterIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          animateCounter(entry.target);
+          counterIo.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.5 });
+    counters.forEach(function(el){ counterIo.observe(el); });
+  } else {
+    counters.forEach(animateCounter);
+  }
+
+  /* ---------------- Testimonial slider ---------------- */
+  var track = document.getElementById('testimonialSlides');
+  var slides = track ? track.children : [];
+  var dotsWrap = document.getElementById('testiDots');
+  var current = 0;
+  var autoplayTimer;
+
+  if(track && slides.length){
+    for(var i=0; i<slides.length; i++){
+      var dot = document.createElement('button');
+      dot.className = 'w-2.5 h-2.5 rounded-full bg-charcoal/20 transition-colors';
+      dot.setAttribute('aria-label', 'Go to testimonial ' + (i+1));
+      dot.addEventListener('click', (function(idx){ return function(){ goToSlide(idx); resetAutoplay(); }; })(i));
+      dotsWrap.appendChild(dot);
+    }
+
+    function updateDots(){
+      Array.prototype.forEach.call(dotsWrap.children, function(d, idx){
+        d.classList.toggle('bg-gold', idx === current);
+        d.classList.toggle('bg-charcoal/20', idx !== current);
+      });
+    }
+    function goToSlide(idx){
+      current = (idx + slides.length) % slides.length;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      updateDots();
+    }
+    function resetAutoplay(){
+      clearInterval(autoplayTimer);
+      if(!reducedMotion){
+        autoplayTimer = setInterval(function(){ goToSlide(current + 1); }, 6000);
+      }
+    }
+    document.getElementById('testiPrev').addEventListener('click', function(){ goToSlide(current - 1); resetAutoplay(); });
+    document.getElementById('testiNext').addEventListener('click', function(){ goToSlide(current + 1); resetAutoplay(); });
+    goToSlide(0);
+    resetAutoplay();
+
+    var slideWrap = document.getElementById('testimonialTrack');
+    slideWrap.addEventListener('mouseenter', function(){ clearInterval(autoplayTimer); });
+    slideWrap.addEventListener('mouseleave', resetAutoplay);
+  }
+
+  /* ---------------- Offer countdowns ---------------- */
+  var countdownEls = document.querySelectorAll('.offer-countdown');
+  countdownEls.forEach(function(el){
+    var days = parseInt(el.getAttribute('data-deadline-days'), 10) || 0;
+    var hours = parseInt(el.getAttribute('data-deadline-hours'), 10) || 0;
+    var deadline = new Date().getTime() + (days * 86400000) + (hours * 3600000);
+    var dEl = el.querySelector('.cd-days'), hEl = el.querySelector('.cd-hours'),
+        mEl = el.querySelector('.cd-mins'), sEl = el.querySelector('.cd-secs');
+    function pad(n){ return n < 10 ? '0'+n : ''+n; }
+    function tick(){
+      var diff = deadline - new Date().getTime();
+      if(diff <= 0){ diff = 0; }
+      var d = Math.floor(diff / 86400000);
+      var h = Math.floor((diff % 86400000) / 3600000);
+      var m = Math.floor((diff % 3600000) / 60000);
+      var s = Math.floor((diff % 60000) / 1000);
+      dEl.textContent = pad(d); hEl.textContent = pad(h); mEl.textContent = pad(m); sEl.textContent = pad(s);
+    }
+    tick();
+    setInterval(tick, 1000);
+  });
+
+  /* ---------------- Reservation form ---------------- */
+  var resForm = document.getElementById('reservationForm');
+  var resFeedback = document.getElementById('resFeedback');
+  var resDate = document.getElementById('resDate');
+  if(resDate){
+    var todayStr = new Date().toISOString().split('T')[0];
+    resDate.setAttribute('min', todayStr);
+  }
+  if(resForm){
+    resForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(!resForm.checkValidity()){
+        resForm.reportValidity();
+        return;
+      }
+      var name = document.getElementById('resName').value.trim();
+      resFeedback.textContent = 'Thank you, ' + name + ' — your table request has been received. We\'ll confirm by email shortly.';
+      resFeedback.classList.remove('text-red-400');
+      resFeedback.classList.add('text-gold');
+      resForm.reset();
+    });
+  }
+
+  /* ---------------- Newsletter form ---------------- */
+  var newsForm = document.getElementById('newsletterForm');
+  var newsFeedback = document.getElementById('newsFeedback');
+  if(newsForm){
+    newsForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(!newsForm.checkValidity()){
+        newsForm.reportValidity();
+        return;
+      }
+      newsFeedback.textContent = "You're on the list — welcome to the fire.";
+      newsForm.reset();
+    });
+  }
+
+  /* ---------------- Button ripple ---------------- */
+  document.querySelectorAll('.btn-primary, .btn-secondary').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      if(reducedMotion) return;
+      var rect = btn.getBoundingClientRect();
+      var ripple = document.createElement('span');
+      var size = Math.max(rect.width, rect.height);
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+      btn.appendChild(ripple);
+      setTimeout(function(){ ripple.remove(); }, 650);
+    });
+  });
+
+  /* ---------------- Ember particle canvas ---------------- */
+  function initEmberCanvas(id){
+    var canvas = document.getElementById(id);
+    if(!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var w, h;
+
+    function resize(){
+      w = canvas.width = canvas.offsetWidth;
+      h = canvas.height = canvas.offsetHeight;
+    }
+    function makeParticle(){
+      return {
+        x: Math.random() * w,
+        y: h + Math.random() * 60,
+        r: 1 + Math.random() * 2.2,
+        speed: 0.4 + Math.random() * 0.9,
+        drift: (Math.random() - 0.5) * 0.6,
+        alpha: 0.25 + Math.random() * 0.55,
+        hue: Math.random() > 0.5 ? '212,175,55' : '245,158,11'
+      };
+    }
+    function init(){
+      resize();
+      particles = [];
+      var count = Math.min(50, Math.floor((w*h)/28000));
+      for(var i=0;i<count;i++){
+        var p = makeParticle();
+        p.y = Math.random() * h;
+        particles.push(p);
+      }
+    }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(function(p){
+        p.y -= p.speed;
+        p.x += p.drift;
+        if(p.y < -10){ Object.assign(p, makeParticle()); p.y = h + 10; }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(' + p.hue + ',' + p.alpha + ')';
+        ctx.shadowColor = 'rgba(' + p.hue + ',0.8)';
+        ctx.shadowBlur = 6;
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+
+    init();
+    window.addEventListener('resize', init);
+
+    if(!reducedMotion){
+      requestAnimationFrame(draw);
+    } else {
+      // Static faint ember dots for reduced-motion preference
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(function(p){
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(' + p.hue + ',' + (p.alpha*0.5) + ')';
+        ctx.fill();
+      });
+    }
+  }
+  initEmberCanvas('emberCanvas');
+  initEmberCanvas('emberCanvas2');
+
+})();
+</script>
+</body>
+  </html>
